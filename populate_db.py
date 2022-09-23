@@ -28,5 +28,7 @@ def stock_symbols():
     return rows
 
 #add stocks to portfolio
-def add_stock():
+def add_stock(id:int):
+    #fetch stock symbol from stock db
+    
     pass
