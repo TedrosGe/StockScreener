@@ -7,6 +7,7 @@ from schema import Symbol
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from datetime import date
 app = FastAPI()
 #displays all us stocks
@@ -39,4 +40,27 @@ async def stock_inventory(symbol:str):
     row = row.fetchall()
     return {"stock added":list(row)}
 
+@app.get("/myStocks/{symbol}")
+async def stock_perf_graph(symbol:str):
+    conn = sqlite3.connect('app.db')
+    cursor = conn.cursor()
+    #get the stock id
+    operation1 = 'select id from stock where symbol = ? '
+    row = cursor.execute(operation1,(symbol,))
+    row = row.fetchall()
+    stock_id = row[0][0]
+    operation2 = "select *from stock_price where stock_id = ? "
+    row = cursor.execute(operation2, (stock_id,))
+    stock_table = row.fetchall()
+    stock_table =list(stock_table)
     
+    pd_table = pd.DataFrame(stock_table, columns= ['stock_id','date','open', 'high','low', 'close','volume'])
+    #set data to y/m/d format
+    pd_table["date"] = pd_table["date"].str[0:11]
+    #index date
+    pd_table = pd_table.set_index('date')
+    #get rid of none values
+    pd_table =pd_table.fillna("")
+    x = pd_table.to_dict(orient='records')
+    #graph stock performance
+    return {"stocks": x}

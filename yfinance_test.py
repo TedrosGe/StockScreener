@@ -1,3 +1,6 @@
+from datetime import date
+from email.policy import strict
+import string
 import yfinance as yf
 import sqlite3
 from stocksymbol import StockSymbol
@@ -26,6 +29,8 @@ row = symbol_id.fetchall()
 foreign_key = (row[0][0])
 df['stock_id']=  foreign_key
 #convert dataframe to sqlite table
-df.to_sql("stock_price", con =conn, if_exists='append', index =False)
+# df.to_sql("stock_price", con =conn, if_exists='append', index =False)
 
-print(cur.execute('select * from stock where id=?', (foreign_key,)))
+row = cur.execute('select * from stock_price where stock_id=?', (foreign_key,))
+row = row.fetchall()
+# sql_to_pd=pd.read_sql("select stock_id, date, open, high, low, close, volume from stock_price where stock_id =? ")
