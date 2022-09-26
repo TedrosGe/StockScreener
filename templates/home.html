@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title> US STOCKS </title>
+        <body>
+           
+          
+            <table class="ui celled structured table">
+                <thead>
+                  <tr>
+                <th>No</th>
+                  <th>Stock Symbol</th>
+                  <th>Company</th>
+            
+                 
+                </tr></thead>
+                <tbody>
+                {% for stock in stocks %}
+                  <tr>
+                    <td data-label="stock symbol">{{stock[0]}}</td>
+                    <td data-label="stock symbol">{{stock[1]}}</td>
+                    <td data-label="Company">{{stock[2]}}</td>
+             
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        
+        </body>
+    </head>
+</html>

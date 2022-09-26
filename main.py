@@ -9,13 +9,23 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date
+import jinja2
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 app = FastAPI()
+
+
+templates = Jinja2Templates(directory="templates")
+
+
 #displays all us stocks
 @app.get("/home")
-async def home_page():
+async def home_page(request:Request):
     create_connection()
     stock = stock_symbols()
-    return {"stocks": stock}
+    return  templates.TemplateResponse("home.html", {"request": request, "stocks":stock})
 
 @app.post("/myStocks/{symbol}")
 async def stock_inventory(symbol:str):
@@ -41,7 +51,7 @@ async def stock_inventory(symbol:str):
     return {"stock added":list(row)}
 
 @app.get("/myStocks/{symbol}")
-async def stock_perf_graph(symbol:str):
+async def stock_perf_graph(symbol:str, request:Request):
     conn = sqlite3.connect('app.db')
     cursor = conn.cursor()
     #get the stock id
@@ -58,9 +68,13 @@ async def stock_perf_graph(symbol:str):
     #set data to y/m/d format
     pd_table["date"] = pd_table["date"].str[0:11]
     #index date
-    pd_table = pd_table.set_index('date')
+    # pd_table = pd_table.set_index('date')
     #get rid of none values
-    pd_table =pd_table.fillna("")
+    
     x = pd_table.to_dict(orient='records')
     #graph stock performance
-    return {"stocks": x}
+
+
+
+    
+    return  templates.TemplateResponse("index.html", {"request": request, "stocks":x})

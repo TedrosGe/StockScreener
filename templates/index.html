@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title> Stock Inventory List </title>
+        <body>
+           
+          
+            <table class="ui celled structured table">
+                <thead>
+                  <tr>
+                  <th>stock_id</th>
+                  <th>Date</th>
+                  <th>Open</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Close</th>
+                  <th>Volume</th>
+                </tr></thead>
+                <tbody>
+                {% for stock in stocks %}
+                  <tr>
+                    <td data-label="stock_id">{{stock["stock_id"]}}</td>
+                    <td data-label="Age">{{stock["date"]}}</td>
+                    <td data-label="Age">{{stock["open"]}}</td>
+                    <td data-label="Job">{{stock["high"]}}</td>
+                    <td data-label="Job">{{stock["low"]}}</td>
+                    <td data-label="Job">{{stock["close"]}}</td>
+                    <td data-label="Job">{{stock["volume"]}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        
+        </body>
+    </head>
+</html>
