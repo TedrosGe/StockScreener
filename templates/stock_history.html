@@ -1,9 +1,14 @@
 <html>
     <head>
         <title> Stock Inventory List </title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
         <body>
-           
-          
+         
+
+
+           </div>
+          <div class = table-view> 
             <table class="ui celled structured table">
                 <thead>
                   <tr>
@@ -19,17 +24,17 @@
                 {% for stock in stocks %}
                   <tr>
                     <td data-label="stock_id">{{stock["stock_id"]}}</td>
-                    <td data-label="Age">{{stock["date"]}}</td>
-                    <td data-label="Age">{{stock["open"]}}</td>
-                    <td data-label="Job">{{stock["high"]}}</td>
-                    <td data-label="Job">{{stock["low"]}}</td>
-                    <td data-label="Job">{{stock["close"]}}</td>
-                    <td data-label="Job">{{stock["volume"]}}</td>
+                    <td data-label="date">{{stock["date"]}}</td>
+                    <td data-label="open">{{stock["open"]}}</td>
+                    <td data-label="high">{{stock["high"]}}</td>
+                    <td data-label="low">{{stock["low"]}}</td>
+                    <td data-label="close">{{stock["close"]}}</td>
+                    <td data-label="volume">{{stock["volume"]}}</td>
                   </tr>
                 {% endfor %}
                 </tbody>
               </table>
-        
+            </div>
         </body>
     </head>
 </html>
