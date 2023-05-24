@@ -22,9 +22,9 @@
                 
                 <form method="get">
                     <select name = "filter">
-                        <option value ="All Stocks"> All Stocks </option>
-                        <option value ="intraday_highs "> New intraday highs</option>
-                        <option value ="closing_highs "> New closing highs </option>
+                        <option value ="all_stocks"> All Stocks </option>
+                        <option value ="intraday_highs"> New intraday highs</option>
+                        <option value ="closing_highs"> New closing highs </option>
 
                     </select>
                   
@@ -57,7 +57,9 @@
                 </tr></thead>
                 <tbody>
                 {% for stock in stocks %}
+               
                   <tr>
+                   
                     <td data-label="stock num">{{stock[0]}}</td>
                     <td data-label="stock symbol">{{stock[1]}}</td>
                     <td data-label="Company"> <a href = "/{{stock[1]}}"> {{stock[2]}}</a></a></td>

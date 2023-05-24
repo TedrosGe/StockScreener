@@ -13,13 +13,10 @@ cur = conn.cursor()
 ss =StockSymbol(api_key)
 us_symbol_list = ss.get_symbol_list("us")
 
-for i in range(len(us_symbol_list)):
-    
-    print(us_symbol_list[i]['exchange'])
-tic = yf.Ticker('TSLA')
+tic = yf.Ticker('AMZN')
 
 
 # ^ returns a named tuple of Ticker objects
 x= tic.history(period="max")
-ticker = yf.Ticker("TSLA")
+print(x)
 
