@@ -12,25 +12,14 @@ conn = sqlite3.connect('app.db')
 cur = conn.cursor()
 ss =StockSymbol(api_key)
 us_symbol_list = ss.get_symbol_list("us")
-# print(us_symbol_list)
-tic = yf.Ticker('MSFT')
+
+for i in range(len(us_symbol_list)):
+    
+    print(us_symbol_list[i]['exchange'])
+tic = yf.Ticker('TSLA')
+
+
 # ^ returns a named tuple of Ticker objects
 x= tic.history(period="max")
-ticker = yf.Ticker("GOOG")
-    # today = date.today()
-stock_table = ticker.history(period='max')
-dates = pd.date_range('18/09/2021', periods= 364)
+ticker = yf.Ticker("TSLA")
 
-df = pd.DataFrame(stock_table, index = dates, columns=['stock_id','Open','High','Low','Close', 'Volume'])
-df['Date'] = df.index
-
-symbol_id = cur.execute('select id from stock where symbol=?', ('GOOG',))
-row = symbol_id.fetchall()
-foreign_key = (row[0][0])
-df['stock_id']=  foreign_key
-#convert dataframe to sqlite table
-# df.to_sql("stock_price", con =conn, if_exists='append', index =False)
-
-row = cur.execute('select * from stock_price where stock_id=?', (foreign_key,))
-row = row.fetchall()
-# sql_to_pd=pd.read_sql("select stock_id, date, open, high, low, close, volume from stock_price where stock_id =? ")

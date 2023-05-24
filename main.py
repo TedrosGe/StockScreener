@@ -14,9 +14,9 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from stocksymbol import StockSymbol
+import helperFunctions as hF
 app = FastAPI()
-
-
 templates = Jinja2Templates(directory="templates")
 
 
@@ -24,25 +24,31 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/home")
 async def home_page(request:Request ):
     create_connection()
-    stock = stock_symbols()
-    try:
+    
+   
+    user_input = request.query_params.get("filter", False)
+    conn = sqlite3.connect('app.db')
+    cursor = conn.cursor()
+    
+        
+    #fix sql query  
+    if user_input =="intraday_highs":
+        #fetch highest stock prices
+        operation = '''
+        select *from ( 
+        select   symbol, id,max(close) from stock_price
+        join stock on stock.id = stock_price.stock_id
+        )
+        where date = ?
+        '''
+        cursor.execute(operation, (date.today().isoformat(),))
+        stocks = cursor.fetchall()
+    else:
+        #fetch all stocks
+        cursor.execute(""" select id, symbol, company from stock ORDER BY symbol""")
+        stocks= cursor.fetchall()
 
-        user_input = request.query_params['filter']
-        conn = sqlite3.connect('app.db')
-        cursor = conn.cursor()
-        if user_input == "All Stocks":
-            stock = stock_symbols()
-            return  templates.TemplateResponse("home.html", {"request": request, "stocks":stock})
-        elif user_input == "intraday_highs":
-            operation = '''select   symbol, close from stock_price
-            join stock on stock.id ==stock_price.stock_id 
-            where date = ?
-            '''
-            stock = cursor.execute(operation, (date.today().isoformat(),))
-            stock = stock.fetchall()
-            return  templates.TemplateResponse("home.html", {"request": request, "stocks":"x"})
-    except:
-        return  templates.TemplateResponse("home.html", {"request": request, "stocks":stock})
+    return  templates.TemplateResponse("home.html", {"request": request, "stocks":stocks})
 
 @app.get("/{symbol}")
 async def fetch_stock_history(symbol:str, request:Request):
@@ -52,20 +58,16 @@ async def fetch_stock_history(symbol:str, request:Request):
     sql_sel = 'select symbol from stock where id = ? '
     symbol_id= cursor.execute(sql_sel, (symbol,))
     row = symbol_id.fetchall()
-    
-    
     ticker = yf.Ticker(symbol)
     today = (date.today())
-    time_dif = timedelta(364)
+    time_dif = timedelta(365)
     stock_table = ticker.history(period='max')
     #set index for dataframe
     dates = pd.date_range(today - time_dif , periods= 365)
     df = pd.DataFrame(stock_table, index = dates, columns=['stock_id','Open','High','Low','Close', 'Volume'])
     #add date as column in sql
-    
     df['Date'] = df.index
     df.sort_index(ascending=False)
-
     symbol_id = cursor.execute('select id from stock where symbol=?', (symbol,))
     row = symbol_id.fetchall()
     #parse 
@@ -89,16 +91,15 @@ async def fetch_stock_history(symbol:str, request:Request):
     pd_table = pd.DataFrame(stock_table, columns= ['stock_id','date','open', 'high','low', 'close','volume'])
     #set data to y/m/d format
     pd_table["date"] = pd_table["date"].str[0:11]
+    pd_table = pd_table.sort_values(by=['date'], ascending= False)
+    stock_history = pd_table.to_dict(orient='records')
+
+    # get trading exchange platform from api
+    ex_platform = hF.get_exchange(symbol)
     
-    # pd_table["date"] = pd.to_datetime(pd_table["date"])
-    #index date
-    # pd_table = pd_table.set_index('date')
-    #get rid of none values
-    x = pd_table.to_dict(orient='records')
-    #graph stock performance
-    return  templates.TemplateResponse("stock_history.html", {"request": request, "stocks":x})
+    return  templates.TemplateResponse("stock_history.html", {"request": request, "stocks":stock_history, "stock_symbol": symbol, "exchange_platform": ex_platform})
     
-    # return templates.TemplateResponse("stock_history.html", {"request": request, "stocks":list(row)})
+
 
 
 @app.post("/{symbol}")

@@ -13,6 +13,7 @@ def  create_connection():
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             symbol TEXT NOT NULL UNIQUE,
             company TEXT NOT NULL
+    
         )
     """)
     cur.execute("""
