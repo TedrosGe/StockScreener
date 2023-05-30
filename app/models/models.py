@@ -1,14 +1,14 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
+from sqlalchemy import Column, Integer, MetaData, String, DateTime, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from app.database.database import Base
 
-from  database.database import Base
 class Stock(Base):
     __tablename__ = "stock"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement= True)
     ticker = Column(String)
     company = Column(String)
-    industry = Column(String)
+    industry = Column(String, nullable= True)
 
     stock_detail = relationship("StockDetail", back_populates="stock")
 
@@ -27,3 +27,4 @@ class StockDetail(Base):
     earnings = Column(Float)
 
     stock = relationship("Stock", back_populates="stock_detail")
+

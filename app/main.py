@@ -1,11 +1,13 @@
 from fastapi import FastAPI
+from sqlalchemy import Engine
 import uvicorn
-from api.endpoints import router
+from fastapi.middleware.cors import CORSMiddleware
+from app.endpoints import stocks
+from app.database.database import Base, create_tables
+
 
 app = FastAPI()
-app.include_router(router)
 
+app.include_router(stocks.router)
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
-    
+create_tables()
