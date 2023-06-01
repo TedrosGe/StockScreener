@@ -15,6 +15,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def create_tables():
-    print("sqlite:///"+curr_path)
+    
     Base.metadata.create_all(bind = engine)
     

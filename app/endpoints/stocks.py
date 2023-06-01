@@ -10,6 +10,6 @@ async def root():
 async def display_stocks():
     add_tickers()
     stocks = fetch_tickers()
-
+    
 
     return {"message": stocks}

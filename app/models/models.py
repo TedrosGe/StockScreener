@@ -7,7 +7,7 @@ class Stock(Base):
     __tablename__ = "stock"
     id = Column(Integer, primary_key=True, autoincrement= True)
     ticker = Column(String)
-    company = Column(String)
+    company = Column(String, nullable=True)
     industry = Column(String, nullable= True)
 
     stock_detail = relationship("StockDetail", back_populates="stock")
