@@ -14,8 +14,8 @@ class Stock(Base):
 
 class StockDetail(Base):
     __tablename__ = "stock_details"
-    stock_id = Column(Integer, ForeignKey("stock.id"), primary_key=True)
-    date = Column(DateTime)
+    stock_id = Column(Integer, ForeignKey("stock.id"))
+    date = Column(String, primary_key=True)
     p_e = Column(Float)
     dividend = Column(Float)
     close = Column(Float)
