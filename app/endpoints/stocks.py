@@ -1,21 +1,25 @@
 from fastapi import APIRouter
 from app.services.home import  fetch_tickers, add_tickers
-from app.services.lookup import stock_history
+from app.services.lookup import fetch_stock_db, stock_history
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 router = APIRouter()
 
 @router.get("/")
-async def root():
-    return {"message": "Hello, FastAPI!"}
-
-@router.get("/lookup")
-async def trending_tickers():
+async def root():    
     add_tickers()
     stocks = fetch_tickers()
     return {"stocks":stocks}
 
-@router.get("/lookup/stock")
-async def  stock_details():
-    x = stock_history()
-    return{"stocks:": x}
+
+@router.get("/lookup/{stock}", tags=["GET"])
+async def fetch_stock_details(stock:str):
+    stock_history =fetch_stock_db(stock)
+    return {"stocks": stock_history}
+
+
+@router.post("/lookup/{stock}", tags = ["POST"])
+async def  stock_details(stock:str):
+    stock_data = stock_history(stock)
+    return{"stocks:": stock_data}
+

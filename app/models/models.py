@@ -6,25 +6,30 @@ from app.database.database import Base
 class Stock(Base):
     __tablename__ = "stock"
     id = Column(Integer, primary_key=True, autoincrement= True)
-    ticker = Column(String)
-    company = Column(String, nullable=True)
+    ticker = Column(String, unique= True)
+    company = Column(String)
     industry = Column(String, nullable= True)
 
     stock_detail = relationship("StockDetail", back_populates="stock")
 
 class StockDetail(Base):
     __tablename__ = "stock_details"
-    stock_id = Column(Integer, ForeignKey("stock.id"))
+   
+    stock_id = Column(Integer, ForeignKey('stock.id'), primary_key=True)  # This column is part of the composite primary key
     date = Column(String, primary_key=True)
-    p_e = Column(Float)
-    dividend = Column(Float)
+    
     close = Column(Float)
     open = Column(Float)
     high = Column(Float)
     low = Column(Float)
     target_price = Column(Float)
     forward_pe = Column(Float)
+    p_e = Column(Float)
+    dividend = Column(Float)
+  
     earnings = Column(Float)
+
+    
 
     stock = relationship("Stock", back_populates="stock_detail")
 
