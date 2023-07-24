@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-
-import Components from './Components'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LookUp from './LookUp'
 import reportWebVitals from './reportWebVitals';
 import App from './App';
+import RenderLineChart from './RenderLineChart'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Components/>
+
+    <div> <RenderLineChart symbol = "GOOG"/> </div>
+    
     
   </React.StrictMode>
 );
