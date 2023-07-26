@@ -19,6 +19,7 @@ class StockDetail(Base):
     date = Column(String, primary_key=True)
     
     close = Column(Float)
+    volume  = Column(Float)
     open = Column(Float)
     high = Column(Float)
     low = Column(Float)

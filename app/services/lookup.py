@@ -42,7 +42,8 @@ def df_to_sql(df: pd.DataFrame, symbol):
                                        close = row["Close"],      
                                        open = row [ "Open"], 
                                        high = row["High"],
-                                       low = row["Low"] 
+                                       low = row["Low"],
+                                       volume = row["Volume"]
                                        )
             
             records.append(stock_detail)
