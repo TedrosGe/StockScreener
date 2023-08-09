@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import { Table, Container } from 'react-bootstrap';
-import KeyInfoComponent1 from "./KeyInfoComponent"
+import KeyInfoComponent from './KeyInfoComponent'
+import TableComponent from './TableComponent';
 
 const LineChartComponent = ({data,symbol}) =>{
  
@@ -22,49 +23,6 @@ const LineChartComponent = ({data,symbol}) =>{
   </div> 
     )
 
-}
-const TableComponent = ({data, symbol}) => {
-  return(
-   
-    <Table striped border hover>
-       {console.log(data)}
-      <thead>
-        <tr>
-          <th>Date </th>
-          <th> Close/Last</th>
-          <th>Volume</th>
-          <th>Open</th>
-          <th>High</th>
-          <th>Low</th>
-
-        </tr>
-      </thead>
-      <tbody>
-      
-       {  data.map((row, index)=> (
-         <tr key = {index}>
-          <td> {row.date}</td>
-          <td>{row.close} </td>
-          <td> {row.volume}</td>
-          <td> {row.open}</td>
-          <td> {row.high}</td>
-          <td> {row.low}</td>
-
-          </tr>
-      
-        )
-        
-        
-        )
-       }
-        
-     
-      </tbody>
-
-
-    </Table>
-
-  )
 }
 
 
@@ -89,11 +47,16 @@ const RenderLineChart = ({ symbol }) => {
  
       <h1>Stock Data Line Chart : {symbol}</h1>
       {stockList.length > 0 ? (
-        <>
+      <div className='container' >
+      <div className='LineChartComponent'> 
      <LineChartComponent data = {stockList} symbol = {symbol}/> 
+
       {/* <TableComponent data = {stockList} symbol = {symbol}/> */}
-      {<KeyInfoComponent1 data ={stockList}/>}
-        </>
+      </div>
+      <div className='KeyInfoComponent'> 
+      {<KeyInfoComponent data ={stockList}/>}
+      </div>
+      </div>
       ) 
     : (
       <p>Loading...</p>

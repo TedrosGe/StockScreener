@@ -3,9 +3,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } f
 import axios from 'axios';
 import { Table, Container } from 'react-bootstrap';
 
-
-
-const KeyInfoComponent1 = ({data}) => {
+const TableComponent = ({data, symbol}) => {
     return(
      
       <Table striped border hover>
@@ -48,5 +46,5 @@ const KeyInfoComponent1 = ({data}) => {
   
     )
   }
-
-  export default KeyInfoComponent1;
+  
+  export default TableComponent;

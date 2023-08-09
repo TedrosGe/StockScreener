@@ -5,10 +5,19 @@ from app.database.database import Base
 
 class Stock(Base):
     __tablename__ = "stock"
-    id = Column(Integer, primary_key=True, autoincrement= True)
-    ticker = Column(String, unique= True)
+    id = Column(Integer, primary_key=True, autoincrement= True, unique=True)
+    ticker = Column(String)
     company = Column(String)
     industry = Column(String, nullable= True)
+    marketCap = Column(Float, nullable= True)
+    recommendationMean = Column(Float, nullable= True)
+    forwardPE = Column(Float, nullable= True)
+    high = Column(Float, nullable= True)
+    low = Column(Float, nullable= True)
+    volume  = Column(Float, nullable= True)
+    currentPrice = Column(Float, nullable= True)
+    fiftyTwoWeekLow = Column(Float, nullable= True)
+    fiftyTwoWeekHigh = Column(Float, nullable= True)
 
     stock_detail = relationship("StockDetail", back_populates="stock")
 
@@ -27,7 +36,6 @@ class StockDetail(Base):
     forward_pe = Column(Float)
     p_e = Column(Float)
     dividend = Column(Float)
-  
     earnings = Column(Float)
 
     
