@@ -18,3 +18,13 @@ code {
   align-items: center; /* Center vertically */
   height: 50vh; /* Optional: Adjust the height to your needs */
 }
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+no-border-table{
+  border: none;
+  background-color: black;
+}

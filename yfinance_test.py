@@ -13,5 +13,6 @@ tic = yf.Ticker('GOOG')
 
 # ^ returns a named tuple of Ticker objects
 x= tic.history(period="1y")
-print(x)
+for i in tic.info:
+    print(i, tic.info[i])
 

@@ -9,5 +9,5 @@ msft = yf.Ticker("MSFT")
 hist = msft.history(period="1mo")
 # get all stock info
 x = msft.info
-for i in x:
-    print(i)
+
+print(x['trailingPegRatio'])
