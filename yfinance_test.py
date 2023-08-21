@@ -7,12 +7,12 @@ from stocksymbol import StockSymbol
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import csv
+import json
+valid_tickers = []
 
-tic = yf.Ticker('GOOG')
 
 
-# ^ returns a named tuple of Ticker objects
-x= tic.history(period="1y")
-for i in tic.info:
-    print(i, tic.info[i])
-
+with open("app/database/tickers.json",) as f:
+        data= json.loads(f.read())
+print(data["tickers"][0])
