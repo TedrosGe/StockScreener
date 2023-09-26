@@ -11,8 +11,4 @@ import csv
 import json
 valid_tickers = []
 
-
-
-with open("app/database/tickers.json",) as f:
-        data= json.loads(f.read())
-print(data["tickers"][0])
+print(yf.Ticker("GOOG").info)
