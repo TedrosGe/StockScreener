@@ -1,49 +1,58 @@
 
+
+
 from sqlalchemy import create_engine
 from stocksymbol import StockSymbol
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
 import yfinance as yf
 import pandas as pd
-from sqlalchemy.orm import sessionmaker
-from pydantic import BaseModel
 from app.models.models import Stock, StockDetail
 from app.database.database import Base, engine, SessionLocal
+import concurrent.futures
+def populate_stock_detail_table(db:Session):
+   
+        stock = db.query(Stock).all()
+        
+        print(stock)
+ 
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = list(executor.map(update_stock_detail, stock,db))
+       
+        print(results)
+     
 
-def stock_history(symbol):
+
+     
+def update_stock_detail(stock:Stock, db:Session()):  
+   
+    df = fetch_stock_api(stock.ticker)
+    df_to_sql(df,stock.ticker)
     
-    df,symbol = fetch_stock_api(symbol)
-    df_to_sql(df,symbol)
-    
-    return {"stock": {symbol}}
+    return {"stock_detail updated": {stock.ticker}}
 
 def fetch_stock_api(symbol):
     with SessionLocal() as session:
-        stock = session.query(Stock).first()
-        
-        records = []
-    
+       
         tick= yf.Ticker(symbol)
-        df = tick.history(period="1y")
+        df = tick.history(period="3y")
         df.index = pd.to_datetime(df.index)
         df.index = df.index.date
-        
     return df, symbol
 
-def df_to_sql(df: pd.DataFrame, symbol):
+def df_to_sql(df: pd.DataFrame, symbol, ):
     session= SessionLocal()
+    #fetch stock to update
     stocks = session.query(Stock).filter(Stock.ticker ==symbol).first()
-    if not stocks:
-         session.close()
-         raise ValueError(f"no stock found")
     records = []
-    for index, row in df.iterrows():
-            
+    for index, row in df.iterrows():   
             stock_detail = StockDetail( stock_id = stocks.id,
                                        date = str(index),
                                        close = row["Close"],      
                                        open = row [ "Open"], 
                                        high = row["High"],
                                        low = row["Low"],
-                                       volume = row["Volume"]
+                                        volume = row["Volume"]
                                        )
             
             records.append(stock_detail)

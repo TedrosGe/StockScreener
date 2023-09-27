@@ -9,6 +9,12 @@ import pandas as pd
 import numpy as np
 import csv
 import json
+
+from app.database.database import SessionLocal
 valid_tickers = []
 
 print(yf.Ticker("GOOG").info)
+
+ 
+db = SessionLocal()
+db.query(Stock)
