@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, MetaData, String, DateTime, Float, ForeignKey
+from pydantic import BaseModel
+from sqlalchemy import Column, Integer, MetaData, String, DateTime, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from passlib.hash import bcrypt
 from app.database.database import Base
 
 class Stock(Base):
@@ -37,8 +39,29 @@ class StockDetail(Base):
     p_e = Column(Float)
     dividend = Column(Float)
     earnings = Column(Float)
-
+    __table_args__ = (
+        UniqueConstraint('stock_id', 'date'),
+    )
     
 
     stock = relationship("Stock", back_populates="stock_detail")
 
+class User(Base):
+    __tablename__ = "user_in"
+    id = Column(Integer , autoincrement= True, primary_key = True)
+    username = Column ( String, unique=True)
+    email = Column ( String, unique=True)
+    password = Column(String)
+
+class UserIn(BaseModel):
+    username : str
+    email : str
+    password : str
+    
+
+    def hash_password(self):
+        self.password = bcrypt.hash(self.password)
+
+class UserOut(BaseModel):
+    username: str
+    email: str

@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from sqlalchemy import Engine
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from app.endpoints import stocks
