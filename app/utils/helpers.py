@@ -22,7 +22,7 @@ class DailyStockUpdater:
 
             try:
                 stock_update = self.get_today_stock_info(stock[0])
-                stock.company: stock_update.get["longName"]
+                stock.company =stock_update.get["longName"]
                 stock.industry = stock_update.get["industry"]
                 stock.marketCap = stock_update.get["marketCap"]
                 stock.recommendationMean= stock_update.get["recommendationMean"]

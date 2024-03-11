@@ -11,10 +11,7 @@ import csv
 import json
 
 from app.database.database import SessionLocal
-valid_tickers = []
-
-print(yf.Ticker("GOOG").info)
-
- 
-db = SessionLocal()
-db.query(Stock)
+s = "tedros"
+hashed_password = s.encode('utf-8')
+    
+print (type(hashed_password))

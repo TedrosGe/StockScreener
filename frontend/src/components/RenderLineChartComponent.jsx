@@ -14,31 +14,23 @@ const RenderLineChart = ({ symbol }) => {
      
       const stocks = response.data.stocks;
       setStockInfo(stocks);
-      setLoading(false); // Set loading to false when data is fetched
+      setLoading(false); 
     } catch (error) {
       console.error("Stock fetch failed", error);
       setLoading(false); // Set loading to false in case of an error
     }
   };
 
-  useEffect(() => {
-    fetchData();
- 
-  }, [symbol]);
+  useEffect(() => { fetchData(); }, [symbol]);
 
   return (
     <div>
      
       <h1> Stock: {symbol}</h1>
-      {loading ? (
-        <p>loading...</p>
-          
-      ) : (
-        <div>
-          
-          { (
+      {loading ? ( <p>loading...</p> ) : (
+        <div> 
+          {(
             <>
-             
             <KeyInfoComponent stock_data={stockInfo} />
             </>
           )}

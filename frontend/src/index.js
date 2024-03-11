@@ -6,15 +6,17 @@ import reportWebVitals from './reportWebVitals';
 
 
 import RenderLineChart from './components/RenderLineChartComponent';
-
+import Login from './components/login'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 
-    <div> <RenderLineChart symbol = 'TSLA'/> </div>
-    
-    
+    {/* <div> <RenderLineChart symbol = 'AAPL'/> </div>
+     */}
+    <div>
+      <Login/>
+    </div>
   </React.StrictMode>
 );
 

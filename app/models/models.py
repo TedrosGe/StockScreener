@@ -57,11 +57,17 @@ class UserIn(BaseModel):
     username : str
     email : str
     password : str
-    
 
-    def hash_password(self):
-        self.password = bcrypt.hash(self.password)
 
 class UserOut(BaseModel):
     username: str
     email: str
+
+class Token(BaseModel):
+    access_token : str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str | None =None
+
+
