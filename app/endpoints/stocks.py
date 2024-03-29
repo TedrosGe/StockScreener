@@ -10,14 +10,12 @@ from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import time
-import csv
-import json
-
 from app.services.user import UserManager
-from app.utils.authentificate_helper import authenticate_user 
 from app.utils.Authentificate import Authentificate 
-router = APIRouter()
 
+
+router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 @router.post("/initialise-database")
 async def initialize_database(db:Session() =Depends(get_db)): # type: ignore
     #fetch filtered, valid tickers
@@ -31,44 +29,50 @@ async def initialize_database(db:Session() =Depends(get_db)): # type: ignore
 
 
     return{"stocks": "populated"}
-
-@router.get("/home/{symbol}")
-async def root(symbol: str, db = Depends(get_db)):
-    stock = fetch_stock_db(symbol, db)
- 
-    return { "stocks": stock}
-
-@router.post("/history/{symbol}")
+@router.post("/home/history/{symbol}")
 async def home(symbol: str, background_tasks: BackgroundTasks, db:Session() =Depends(get_db)):   # type: ignore
     stockHistory =  fetch_stock_history(symbol, db)
     return {"status":stockHistory}
 
+@router.get("/home/")
+async def root( db = Depends(get_db)):
+    pass
 
-# @router.post("/home/{stock}", tags = ["POST"])
-# async def  stock_details(stock:str):
-#   pass
+
+@router.get("/home/{symbol}")
+async def root(symbol: str, db = Depends(get_db)):
+    stock = fetch_stock_db(symbol, db)
+    return { "stocks": stock}
+@router.get("/home/history/{symbol}")
+async def get_stock_history(symbol: str, db = Depends(get_db)):
+    stock_history = fetch_stock_history(symbol, db)
+    return stock_history
+
+
 
 
 @router.post("/users/", response_model = UserOut)
 async def create_user(user:UserIn, db: Session = Depends(get_db)) -> any:
     new_user = UserManager.create_user(user, db)
-
     return { "new_user": new_user}
 
 @router.post("/token")
-async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+async def login_for_access_token(form_data,
                                 db:Session= Depends(get_db)) -> Token:
-    user = authenticate_user(form_data.username, form_data.password, db )
+    user = Authentificate.authenticate_user(form_data["username"], form_data["password"], db )
     if not user:
         raise HTTPException( 
             
             status_code = status.HTTP_401_UNAUTHORIZED,
-            detail = "incorrect username or password",
+            detail = "incorrect credentials",
         )
    
     token_expiration_time =  Authentificate.token_expiration()
     access_token = Authentificate.create_jwt_token( data ={ "sub": user.username}, expires_delta = token_expiration_time)
     
-    return Token(access_token= access_token, token_type= "bearer")
+    return access_token
 
 
+@router.get("/items")
+async def read_items(token: Annotated[str, Depends(oauth2_scheme)] ):
+    return {"token":token}

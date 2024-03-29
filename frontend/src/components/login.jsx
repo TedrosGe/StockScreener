@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-
+import axios from 'axios';
 
 const Login = () =>{
     const [email, setEmail] = useState("")
@@ -18,7 +18,15 @@ const Login = () =>{
     const submitLogin = (event) => {
         event.preventDefault();
 
-        console.log("login in with:",  userName)
+        const url = ' http://localhost:8000/token';
+        const userData = {
+            username: userName,
+            password : password
+        }
+        axios.post(url,userData ).then((response)=>{
+            console.log(response.data.token);
+        })
+    
     };
 
     return(

@@ -6,8 +6,8 @@ import { Table, Container } from 'react-bootstrap';
 const TableComponent = ({data, symbol}) => {
     return(
      
-      <Table striped border hover>
-         {console.log(data)}
+      <Table className="w-full">
+        
         <thead>
           <tr>
             <th>Date </th>
@@ -23,7 +23,7 @@ const TableComponent = ({data, symbol}) => {
         
          {  data.map((row, index)=> (
            <tr key = {index}>
-            <td> {row.date}</td>
+            <td > {row.date}</td>
             <td>{row.close} </td>
             <td> {row.volume}</td>
             <td> {row.open}</td>

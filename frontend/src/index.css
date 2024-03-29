@@ -1,33 +1,4 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-
-
-
-.wrapper {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.center-container{
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 50vh; /* Optional: Adjust the height to your needs */
-}
-.container{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-no-border-table{
-  border: none;
-  background-color: black;
-}

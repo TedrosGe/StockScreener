@@ -68,6 +68,11 @@ def fetch_stock_db(symbol,db:Session):
 
 
 def fetch_stock_history(symbol,db:Session):
-    sql_query = db.query(StockDetail).join(Stock, StockDetail = Stock.id).filter(Stock.ticker ==symbol).all()
+    stock_id = db.query(Stock.id).filter(Stock.ticker ==symbol).first()
+    if stock_id:
+         stock_id = stock_id[0]
+   
+   
+    stock_history = db.query(StockDetail).filter(StockDetail.stock_id ==stock_id).all()
 
-    return sql_query
+    return {"stock_history": stock_history}

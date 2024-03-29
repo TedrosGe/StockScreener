@@ -14,4 +14,4 @@ from app.database.database import SessionLocal
 s = "tedros"
 hashed_password = s.encode('utf-8')
     
-print (type(hashed_password))
+print ((hashed_password))

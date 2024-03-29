@@ -11,8 +11,12 @@ from app.models.models import Stock, StockDetail
 from app.database.database import Base, engine, SessionLocal
 import concurrent.futures
 def get_db():
+    
     db = SessionLocal()
-
+    try:
+        yield db
+    finally:
+        db.close()
     return db
 
 def fetch_tickers_api():
