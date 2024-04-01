@@ -1,10 +1,5 @@
 import React from 'react';
-
-
-
-
-
-
+import '../index.css';
 
 const LoadingComponent = () => (
   <p>Loading...</p>

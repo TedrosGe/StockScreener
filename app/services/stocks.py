@@ -1,7 +1,7 @@
 
 
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc, func
 from stocksymbol import StockSymbol
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -76,3 +76,47 @@ def fetch_stock_history(symbol,db:Session):
     stock_history = db.query(StockDetail).filter(StockDetail.stock_id ==stock_id).all()
 
     return {"stock_history": stock_history}
+
+
+def fetch_max_change_stocks(db:Session):
+    sub = (
+        db.query(
+            StockDetail,
+            func.row_number().over(
+                partition_by=StockDetail.stock_id,
+                order_by=desc(StockDetail.date)
+            ).label('row_number')
+        )
+        .subquery()
+    )
+
+    #   get the last two most recent close elements for each stock_id
+    query = (
+        db.query(Stock.ticker, sub.c.stock_id, sub.c.date, sub.c.close).join(sub, Stock.id ==sub.c.stock_id)
+        .filter(sub.c.row_number <= 2)
+        .order_by(sub.c.stock_id, sub.c.date.desc())
+    )
+
+    results = query.all()
+    print(results)
+    results_dict = {}
+
+    for ticker, stock_id, date, close in results:
+        if stock_id in results_dict:
+              results_dict[stock_id].append([date, close])
+        else:
+            results_dict[stock_id] =  [[ticker],[date,close]]
+            #calculate percent change for close price
+    for id in results_dict:
+        first_close_price=results_dict[id][1][1]
+        second_close_price = results_dict[id][2][1]
+        percent_change = (first_close_price-second_close_price)/second_close_price
+        results_dict[id].append([percent_change])
+    
+    trending_stocks_percent_change = {}
+
+    #sort dict by percent change desc
+
+    trending_stocks_percent_change = sorted(results_dict.items(), key = lambda x : x[1][3], reverse=True)
+
+    return {"x": trending_stocks_percent_change}

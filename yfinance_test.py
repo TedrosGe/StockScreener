@@ -9,9 +9,15 @@ import pandas as pd
 import numpy as np
 import csv
 import json
-
+import yfinance
 from app.database.database import SessionLocal
-s = "tedros"
-hashed_password = s.encode('utf-8')
-    
-print ((hashed_password))
+import yfinance as yf
+
+google = yf.Ticker("GOOG")
+hist = google.history(period="5d")
+
+# Convert datetime index to string format with only date part
+hist.index = pd.to_datetime(hist.index)
+
+hist.index = hist.index.date
+print(hist)
